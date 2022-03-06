@@ -1,0 +1,43 @@
+﻿openapi: 3.0.0
+info:
+  title: test data
+  version: '1.0'
+servers:
+  - url: 'http://127.0.0.1:4010'
+paths: 
+  /hello-world/{greetingId}:
+    get:
+      summary: Greeting endpoint
+      description: Return greeting by Id
+      operationId: getGreetingById
+      parameters:
+        - name: greetingId
+          in: path
+          description: greetingId to return
+          required: true
+          schema: 
+            type: integer
+            format: int64
+      tags: []
+      responses: 
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema: 
+                $ref: './example-schema.yaml'
+              examples:
+                1:
+                  $ref: './test-response.1.yaml'
+                2:
+                  $ref: './test-response.2.yaml'
+    post:
+      summary: Post your own greeting
+      requestBody: 
+        content: 
+          application/json:
+            schema: 
+              $ref: './example-schema.yaml'
+      responses: 
+        '201':
+          description: CREATED

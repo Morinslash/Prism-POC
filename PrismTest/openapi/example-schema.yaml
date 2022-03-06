@@ -1,0 +1,12 @@
+﻿title: Greeting
+type: object
+properties:
+  greeting:
+    type: string
+    example: "good"
+  dayTime:
+    type: string
+    example: "day"
+required:
+  - greeting
+  - dayTime

@@ -1,0 +1,5 @@
+﻿summary: An example greeting
+value:
+  greetingId: 1
+  greeting: "Hello"
+  dayTime: "World!!"
