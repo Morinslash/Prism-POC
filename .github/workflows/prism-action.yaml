@@ -16,7 +16,6 @@ jobs:
         ports:
           - 4010:4010
     steps:
-      - uses: actions/checkout@v2
       - name: Setup .NET SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1.7.2
         with:
