@@ -4,6 +4,7 @@ on:
   
 jobs:
   prism-test:
+    timeout-minutes: 5
     runs-on: ubuntu-20.04
     strategy:
       matrix: 
@@ -27,4 +28,5 @@ jobs:
         shell: bash
       
       - name: stop containers
+        if: always()
         run: docker-compose -f "docker-compose.yaml" down
