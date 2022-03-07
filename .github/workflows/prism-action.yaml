@@ -8,22 +8,13 @@ jobs:
     strategy:
       matrix: 
         dotnet-version: ['6.0.x']   
-    services:
-      prism:
-        image: stoplight/prism:4
-        volumes: 
-        - ${{ github.workspace }}/PrismTest/openapi:/tmp/
-        ports:
-          - 4010:4010
     steps:
+      - name: start docker-compose
+        run: docker-compose -f "docker-compose.yaml" up -d --build
       - name: Setup .NET SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: start prism
-        uses: docker://docker
-        with:
-          args: docker exec -d prism "mock -h 0.0.0.0 /tmp/test-api.yaml"
       - run: dotnet restore
         shell: bash
       - run: dotnet test
