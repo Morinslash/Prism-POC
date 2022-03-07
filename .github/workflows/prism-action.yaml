@@ -9,6 +9,8 @@ jobs:
       matrix: 
         dotnet-version: ['6.0.x']   
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
       - name: start docker-compose
         run: docker-compose -f "docker-compose.yaml" up -d --build
       - name: Setup .NET SDK ${{ matrix.dotnet-version }}
