@@ -11,7 +11,8 @@ jobs:
     services:
       prism:
         image: stoplight/prism:4
-        options: -v ${{ github.workspace }}/PrismTest/openapi:/tmp/ --entrypoint "mock -h 0.0.0.0 /tmp/test-api.yaml"
+        volumes: 
+        - ${{ github.workspace }}/PrismTest/openapi:/tmp/
         ports:
           - 4010:4010
     steps:
@@ -20,10 +21,10 @@ jobs:
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: restart prism
+      - name: start prism
         uses: docker://docker
         with:
-          args: docker restart prism
+          args: docker exec -d prism "mock -h 0.0.0.0 /tmp/test-api.yaml"
       - run: dotnet restore
         shell: bash
       - run: dotnet test
