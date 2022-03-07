@@ -11,13 +11,20 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        
       - name: start docker-compose
         run: docker-compose -f "docker-compose.yaml" up -d --build
+        
       - name: Setup .NET SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+          
       - run: dotnet restore
         shell: bash
+        
       - run: dotnet test
         shell: bash
+      
+      - name: stop containers
+        run: docker-compose -f "docker-compose.yaml" down
