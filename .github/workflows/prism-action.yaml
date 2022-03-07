@@ -1,6 +1,6 @@
 name: prism-test
 on:
-  workflow_dispatch: [push]
+  push
   
 jobs:
   prism-test:
