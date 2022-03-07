@@ -15,7 +15,7 @@ public class GreetingClientApi
     {
         _httpClientFactory.CreateClient();
         var httpClient = _httpClientFactory.CreateClient();
-        var result = await httpClient.GetAsync($"http://localhost:4010/hello-world/{id}");
+        var result = await httpClient.GetAsync($"hello-world/{id}");
         return result;
     }
 }

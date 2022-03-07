@@ -1,0 +1,27 @@
+name: prism-test
+on:
+  workflow_dispatch: [push]
+  
+jobs:
+  prism-test:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix: 
+        dotnet-version: ['6.0.x']   
+    services: 
+      image: stoplight/prism:4
+      options: --entrypoint "mock -h 0.0.0.0 /tmp/test-api.yaml"
+      volumes: 
+        - ./PrismTest/openapi/:/tmp/
+      ports:
+        - 4010:4010
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - run: dotnet restore
+        shell: bash
+      - run: dotnet test
+        shell: bash
