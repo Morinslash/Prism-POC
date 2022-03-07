@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -8,17 +7,17 @@ namespace PrismTest;
 
 public class PrismMockShould
 {
+    private readonly string testHost = "http://localhost:4010";
     [Fact]
     public async Task Test1()
     {
-        int id = 1;
-        HttpClient testClient = new HttpClient();
-        testClient.DefaultRequestHeaders.Add("Prefer",$"example={id}");
-       
-        var sut = new GreetingClientApi(testClient);
-        var result = await sut.GetGreetingWith(id);
-        var greeting = await result.Content.ReadAsStringAsync();
-        var resultRecord = JsonConvert.DeserializeObject<GreetingRecord>(greeting);
+        string resourceId = "1";
+        IHttpClientFactory testClientFactory = new TestHttpClientFactory(resourceId, testHost);
+
+        var sut = new GreetingClientApi(testClientFactory);
+        var httpResponse = await sut.GetGreetingWith(resourceId);
+        var responseContent = await httpResponse.Content.ReadAsStringAsync();
+        var resultRecord = JsonConvert.DeserializeObject<GreetingRecord>(responseContent);
 
         var expectedRecord = new GreetingRecord
         {
@@ -32,14 +31,13 @@ public class PrismMockShould
     [Fact]
     public async Task Test2()
     {
-        int id = 2;
-        HttpClient testClient = new HttpClient();
-        testClient.DefaultRequestHeaders.Add("Prefer",$"example={id}");
+        string resourceId = "2";
+        IHttpClientFactory testClientFactory = new TestHttpClientFactory(resourceId, testHost);
         
-        var sut = new GreetingClientApi(testClient);
-        var result = await sut.GetGreetingWith(id);
-        var greeting = await result.Content.ReadAsStringAsync();
-        var resultRecord = JsonConvert.DeserializeObject<GreetingRecord>(greeting);
+        var sut = new GreetingClientApi(testClientFactory);
+        var httpResponse = await sut.GetGreetingWith(resourceId);
+        var responseContent = await httpResponse.Content.ReadAsStringAsync();
+        var resultRecord = JsonConvert.DeserializeObject<GreetingRecord>(responseContent);
 
         var expectedRecord = new GreetingRecord
         {
@@ -48,27 +46,5 @@ public class PrismMockShould
             DayTime = "Day!!"
         };
         Assert.Equal(expectedRecord, resultRecord);
-    }
-}
-
-public record GreetingRecord
-{
-    public int GreetingId { get; init; }
-    public string Greeting { get; init; }
-    public string DayTime { get; init; }
-}
-
-public class GreetingClientApi
-{
-    private readonly HttpClient _httpClient;
-
-    public GreetingClientApi(HttpClient client)
-    {
-        _httpClient = client;
-    }
-    public async Task<HttpResponseMessage> GetGreetingWith(int id)
-    {
-        var result = await _httpClient.GetAsync($"http://localhost:4010/hello-world/{id}");
-        return result;
     }
 }

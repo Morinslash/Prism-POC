@@ -25,19 +25,19 @@ paths:
           content: 
             application/json:
               schema: 
-                $ref: './example-schema.yaml'
+                $ref: './api-models/example-schema.yaml'
               examples:
                 1:
-                  $ref: './test-response.1.yaml'
+                  $ref: './api-example-responses/test-response.1.yaml'
                 2:
-                  $ref: './test-response.2.yaml'
+                  $ref: './api-example-responses/test-response.2.yaml'
     post:
       summary: Post your own greeting
       requestBody: 
         content: 
           application/json:
             schema: 
-              $ref: './example-schema.yaml'
+              $ref: './api-models/example-schema.yaml'
       responses: 
         '201':
           description: CREATED
