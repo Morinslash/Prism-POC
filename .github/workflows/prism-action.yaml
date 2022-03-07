@@ -10,9 +10,7 @@ jobs:
         dotnet-version: ['6.0.x']   
     services: 
       image: stoplight/prism:4
-      options: --entrypoint "mock -h 0.0.0.0 /tmp/test-api.yaml"
-      volumes: 
-        - "/PrismTest/openapi:/tmp"
+      options: -v "${{ github.workspace }}/PrismTest/openapi:/tmp" --entrypoint "mock -h 0.0.0.0 /tmp/test-api.yaml"
       ports:
         - 4010:4010
     steps:
