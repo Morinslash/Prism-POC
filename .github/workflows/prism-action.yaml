@@ -12,7 +12,7 @@ jobs:
       prism:
         image: stoplight/prism:4
         volumes: 
-        - /PrismTest/openapi:/tmp/
+        - ${{ github.workspace }}/PrismTest/openapi:/tmp/
         options: --entrypoint "mock -h 0.0.0.0 /tmp/test-api.yaml"
         ports:
           - 4010:4010
