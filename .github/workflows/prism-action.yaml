@@ -1,32 +1,27 @@
 name: prism-test
 on:
   push
-  
+
 jobs:
   prism-test:
-    timeout-minutes: 5
     runs-on: ubuntu-20.04
     strategy:
-      matrix: 
-        dotnet-version: ['6.0.x']   
+      matrix:
+        dotnet-version: ['6.0.x']
+    services:
+      prism:
+        image: stoplight/prism:4
+        options: 
+          --entrypoint "mock -h 0.0.0.0 https://raw.githubusercontent.com/Morinslash/Prism-POC/master/PrismTest/openapi/test-api.yaml"
+        ports:
+          - 4010:4010
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        
-      - name: start docker-compose
-        run: docker-compose -f "docker-compose.yaml" up -d --build
-        
+      - uses: actions/checkout@v2
       - name: Setup .NET SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-          
       - run: dotnet restore
         shell: bash
-        
       - run: dotnet test
         shell: bash
-      
-      - name: stop containers
-        if: always()
-        run: docker-compose -f "docker-compose.yaml" down

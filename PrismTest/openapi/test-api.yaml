@@ -3,7 +3,7 @@ info:
   title: test data
   version: '1.0'
 servers:
-  - url: 'http://127.0.0.1:4010'
+  - url: 'http://127.0.0.1:4010/api/{channelManagerAlias}/v1'
 paths: 
   /hello-world/{greetingId}:
     get:
