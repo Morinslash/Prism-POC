@@ -1,5 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -33,7 +35,8 @@ public class PrismMockShould
     {
         string resourceId = "2";
         IHttpClientFactory testClientFactory = new TestHttpClientFactory(resourceId, testHost);
-        
+        var clinet = new Mock<HttpClient>();
+        HttpRequestMessage expected;
         var sut = new GreetingClientApi(testClientFactory);
         var httpResponse = await sut.GetGreetingWith(resourceId);
         var responseContent = await httpResponse.Content.ReadAsStringAsync();
@@ -46,5 +49,11 @@ public class PrismMockShould
             DayTime = "Day!!"
         };
         Assert.Equal(expectedRecord, resultRecord);
+    }
+
+    [Fact]
+    public void METHOD()
+    {
+        
     }
 }

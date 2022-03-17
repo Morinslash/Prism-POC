@@ -38,6 +38,11 @@ paths:
           application/json:
             schema: 
               $ref: './api-models/example-schema.yaml'
+            examples:
+              1:
+                value: 
+                  greeting: "hello"
+                  dayTime: "night"
       responses: 
         '201':
           description: CREATED
