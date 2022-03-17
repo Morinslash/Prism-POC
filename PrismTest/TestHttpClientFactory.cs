@@ -15,7 +15,7 @@ public class TestHttpClientFactory : IHttpClientFactory
     }
     public HttpClient CreateClient(string name)
     {
-        var httpClient = new HttpClient();
+        var httpClient = new HttpClientSpy();
         httpClient.BaseAddress = new Uri(_testHost);
         httpClient.DefaultRequestHeaders.Add("Prefer",$"example={_testHeaderValue}");
         return httpClient;

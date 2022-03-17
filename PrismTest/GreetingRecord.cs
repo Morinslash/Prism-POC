@@ -3,6 +3,6 @@ namespace PrismTest;
 public record GreetingRecord
 {
     public int GreetingId { get; init; }
-    public string Greeting { get; init; }
-    public string DayTime { get; init; }
+    public string greeting { get; init; }
+    public string dayTime { get; init; }
 }

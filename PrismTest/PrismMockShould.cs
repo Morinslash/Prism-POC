@@ -1,5 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
@@ -24,8 +30,8 @@ public class PrismMockShould
         var expectedRecord = new GreetingRecord
         {
             GreetingId = 1,
-            Greeting = "Hello",
-            DayTime = "World!!"
+            greeting = "Hello",
+            dayTime = "World!!"
         };
         Assert.Equal(expectedRecord, resultRecord);
     }
@@ -45,15 +51,37 @@ public class PrismMockShould
         var expectedRecord = new GreetingRecord
         {
             GreetingId = 2,
-            Greeting = "Good",
-            DayTime = "Day!!"
+            greeting = "Good",
+            dayTime = "Day!!"
         };
         Assert.Equal(expectedRecord, resultRecord);
     }
 
     [Fact]
-    public void METHOD()
+    public async Task CaptureResponse()
     {
+        string resourceId = "1";
+        IHttpClientFactory testClientFactory = new TestHttpClientFactory(resourceId, testHost);
+        var mockClient = new HttpClientSpy();
+        mockClient.BaseAddress = new Uri(testHost);
         
+        var greetingClientApi = new GreetingClientApi(testClientFactory);
+        await greetingClientApi.PostGreeting(resourceId, mockClient);
+        await greetingClientApi.PostGreeting(resourceId, mockClient);
+        await greetingClientApi.PostGreeting(resourceId, mockClient);
+        var httpResponseMessage = await greetingClientApi.PostGreeting(resourceId, mockClient);
+        var httpRequestMessage = mockClient.captor.First();
+        var content = await httpRequestMessage.Content.ReadAsStringAsync();
+        Assert.True(httpResponseMessage.StatusCode == HttpStatusCode.Created);
+    }
+}
+
+public class HttpClientSpy : HttpClient
+{
+    public List<HttpRequestMessage> captor = new();
+    public override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        captor.Add(request);
+        return base.SendAsync(request);
     }
 }
