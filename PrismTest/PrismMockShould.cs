@@ -81,6 +81,7 @@ public class HttpClientSpy : HttpClient
     public List<HttpRequestMessage> captor = new();
     public override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        var nope = "noe";
         captor.Add(request);
         return base.SendAsync(request);
     }
