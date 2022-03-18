@@ -1,3 +1,3 @@
 #!/bin/sh
 
-dotnet test "./PrismTest/PrismTest.csproj"
+exec dotnet test "./PrismTest/PrismTest.csproj"
